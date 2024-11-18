@@ -129,9 +129,9 @@ if file:
     df["Upper Prediction Limit"] = np.round(intervals[:, 1], 2)
 
     # Add results to the original DataFrame
-    df1["Predicted Volume"] = df["Predicted Volume"]
-    df1["Lower Prediction Limit"] = df["Lower Prediction Limit"]
-    df1["Upper Prediction Limit"] = df["Upper Prediction Limit"]
+    df1["Predicted Volume"] = df["Predicted Volume"].round(1)
+    df1["Lower Prediction Limit"] = df["Lower Prediction Limit"].round(1)
+    df1["Upper Prediction Limit"] = df["Upper Prediction Limit"].round(1)
 
     # Display the dataframes
     st.dataframe(data=df1)
