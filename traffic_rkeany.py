@@ -100,11 +100,13 @@ expected_columns = ['temp', 'rain_1h', 'snow_1h', 'clouds_all', 'holiday_Columbu
                     'holiday_None', 'holiday_State Fair', 'holiday_Thanksgiving Day', 'holiday_Veterans Day', 
                     'holiday_Washingtons Birthday', 'weather_main_Clouds', 'weather_main_Drizzle', 'weather_main_Fog', 
                     'weather_main_Haze', 'weather_main_Mist', 'weather_main_Rain', 'weather_main_Smoke', 'weather_main_Snow', 
-                    'weather_main_Squall', 'weather_main_Thunderstorm', 'month_2', 'month_3', 'month_4', 'month_5', 'month_6', 
-                    'month_7', 'month_8', 'month_9', 'month_10', 'month_11', 'month_12', 'weekday_Monday', 'weekday_Saturday', 
-                    'weekday_Sunday', 'weekday_Thursday', 'weekday_Tuesday', 'weekday_Wednesday', 'hour_1', 'hour_2', 'hour_3', 
-                    'hour_4', 'hour_5', 'hour_6', 'hour_7', 'hour_8', 'hour_9', 'hour_10', 'hour_11', 'hour_12', 'hour_13', 
-                    'hour_14', 'hour_15', 'hour_16', 'hour_17', 'hour_18', 'hour_19', 'hour_20', 'hour_21', 'hour_22', 'hour_23']
+                    'weather_main_Squall', 'weather_main_Thunderstorm', 'month_August', 'month_December', 'month_February', 
+                    'month_January', 'month_July', 'month_June', 'month_March', 'month_May', 'month_November', 'month_October', 
+                    'month_September', 'weekday_Monday', 'weekday_Saturday', 'weekday_Sunday', 'weekday_Thursday', 'weekday_Tuesday', 
+                    'weekday_Wednesday', 'hour_1', 'hour_2', 'hour_3', 'hour_4', 'hour_5', 'hour_6', 'hour_7', 'hour_8', 'hour_9', 
+                    'hour_10', 'hour_11', 'hour_12', 'hour_13', 'hour_14', 'hour_15', 'hour_16', 'hour_17', 'hour_18', 'hour_19', 
+                    'hour_20', 'hour_21', 'hour_22', 'hour_23']
+
 
 
 
@@ -117,11 +119,11 @@ if file:
     for col in expected_columns:
         if col not in df.columns:
             df[col] = 0
-
-    X = df[expected_columns]
+    
+    df = df.reindex(columns=expected_columns, fill_value=0)
 
     # Make predictions and get the intervals
-    predictions, intervals = reg_model.predict(X, alpha=alpha)
+    predictions, intervals = reg_model.predict(df, alpha=alpha)
 
     # Round predictions and intervals to 2 decimal points
     df["Predicted Volume"] = np.round(predictions, 2)
@@ -129,9 +131,9 @@ if file:
     df["Upper Prediction Limit"] = np.round(intervals[:, 1], 2)
 
     # Add results to the original DataFrame
-    df1["Predicted Volume"] = round(df["Predicted Volume"], 1)
-    df1["Lower Prediction Limit"] = round(df["Lower Prediction Limit"], 1)
-    df1["Upper Prediction Limit"] = round(df["Upper Prediction Limit"], 1)
+    df1["Predicted Volume"] = round(df["Predicted Volume"], 1).round()
+    df1["Lower Prediction Limit"] = round(df["Lower Prediction Limit"], 1).round()
+    df1["Upper Prediction Limit"] = round(df["Upper Prediction Limit"], 1).round()
 
     # Display the dataframes
     st.dataframe(data=df1)
